@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "fullname" . }}
+  labels:
+    run: background
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
+spec:
+  selector:
+    matchLabels:
+      run: background
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        run: background
+    spec:
+      volumes:
+        - name: configmap-volume
+          configMap:
+            name: nginx-conf
+      containers:
+        - name: nginx
+          image: nginx
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - mountPath: /etc/nginx/nginx.conf
+              name: configmap-volume
+              readOnly: true
+      restartPolicy: OnFailure
