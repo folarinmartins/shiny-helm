@@ -1,0 +1,24 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: hello
+spec:
+  schedule: "* * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: nginx
+            image: nginx
+            ports:
+            - containerPort: 80
+            volumeMounts:
+            - mountPath: /etc/nginx/nginx.conf
+              name: configmap-volume
+              readOnly: true
+            command:
+            - /bin/sh
+            - -c
+            - date; echo nginx server is up
+          restartPolicy: OnFailure

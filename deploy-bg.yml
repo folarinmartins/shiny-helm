@@ -27,3 +27,4 @@ spec:
         - mountPath: /etc/nginx/nginx.conf
           name: configmap-volume
           readOnly: true
+      restartPolicy: OnFailure
